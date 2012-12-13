@@ -11,11 +11,9 @@ if(start.length != end.length) {
   sys.exit(1)
 }
 
-time({
-  println(start + " > " + end)
-  val answer = doEverything(start, end)
-  println(answer)
-})
+println(start + " > " + end)
+val answer = doEverything(start, end)
+println(answer)
 
 def doEverything(start: String, end: String): String = {
   var lines = io.Source.fromFile("/usr/share/dict/words").getLines.filter(_.length == start.length).toIterable.toSet.par
@@ -24,9 +22,10 @@ def doEverything(start: String, end: String): String = {
   var offByOne = pair._1.map(x => (x, start + " > " + x)).toMap
   lines = pair._2.toSet
 
-  while(lines.size > 0 && offByOne.size > 0) { 
-    if (offByOne.contains(end)) {
-      return offByOne.get(end).get
+  do {
+    offByOne.get(end) match {
+      case Some(x) => return x
+      case None => None
     }
 
     val possibilities = offByOne.par.map(x => {
@@ -36,17 +35,9 @@ def doEverything(start: String, end: String): String = {
       }).flatten.toMap
 
     offByOne = possibilities
-  }
+  } while (lines.size > 0 && offByOne.size > 0) 
 
   return "FAILURE"
 }
 
-def isOffByOne(word: String, other: String): Boolean = (word, other).zipped.map(_ == _).count(!_) == 1
-
-def time[A](a: => A) = {
-        val now = System.nanoTime
-        val result = a
-        val seconds = (System.nanoTime - now) / 1e9
-        println(seconds + " seconds")
-        result
-      }
+def isOffByOne(word: String, other: String) = (word, other).zipped.map(_ == _).count(!_) == 1
