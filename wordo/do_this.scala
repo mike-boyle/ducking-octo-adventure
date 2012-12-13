@@ -1,5 +1,15 @@
-val start = "catch"
-val end = "blast"
+if(args.size != 2) {
+  println("I HATE YOU")
+  sys.exit(1)
+}
+
+val start = args(0)
+val end = args(1)
+
+if(start.length != end.length) {
+  println("IDIOT")
+  sys.exit(1)
+}
 
 time({
   println(start + " > " + end)
