@@ -46,7 +46,7 @@ def isOffByOne(word: String, other: String): Boolean = (word, other).zipped.map(
 def time[A](a: => A) = {
         val now = System.nanoTime
         val result = a
-        val seconds = (System.nanoTime - now) / 1000000000
-        println("%d seconds".format(seconds))
+        val seconds = (System.nanoTime - now) / 1e9
+        println(seconds + " seconds")
         result
       }
