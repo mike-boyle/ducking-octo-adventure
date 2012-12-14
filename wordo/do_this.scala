@@ -22,6 +22,16 @@ def doEverything(start: String, end: String): String = {
   var offByOne = pair._1.map(x => (x, start + " > " + x)).toMap
   lines = pair._2.toSet
 
+  val stream = Stream.cons(offByOne, Stream.continually(
+    stream.tail.par.map(x => {
+      val items = lines.filter(isOffByOne(x._1, _)).toSet
+        lines = lines &~ items
+        items.map(y => (y, x._2 + " > " + y))
+    }).flatten.toMap
+
+  stream.find(_.contains(end))
+
+
   do {
     offByOne.get(end) match {
       case Some(x) => return x
