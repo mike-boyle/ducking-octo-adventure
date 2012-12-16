@@ -1,5 +1,5 @@
 if(args.size != 2) {
-  println("I HATE YOU")
+  println("Invalid number of arguments.")
   sys.exit(1)
 }
 
@@ -7,7 +7,7 @@ val start = args(0)
 val end = args(1)
 
 if(start.length != end.length) {
-  println("IDIOT")
+  println("Word lengths must match.")
   sys.exit(1)
 }
 
@@ -15,7 +15,7 @@ var lines = io.Source.fromFile("/usr/share/dict/words").getLines
   .filter(_.length == start.length).toIterable.toSet
 
 if(!lines.contains(start) || !lines.contains(end)) {
-  println("BAD WORD ALERT")
+  println("Word does not exist in dictionary.")
   sys.exit(1)
 }
 
@@ -23,9 +23,12 @@ println(start + " > " + end)
 println(getAnswer)
 
 def getAnswer: String = {
-  val stream = collection.Iterator.iterate(Map(start -> start))(getNeighbors(_))
-  stream.find(x => x.contains(end) || x.isEmpty).get.getOrElse(end, "FAILURE")
+  val stream = collection.Iterator.iterate(Map(start -> start))(getNeighbors)
+  stream.find(isLastElement).get.getOrElse(end, "FAILURE")
 }
+
+def isLastElement(x: Map[String, String]) = x.contains(end) || x.isEmpty
+def isOffByOne(word: String, other: String) = (word, other).zipped.map(_ == _).count(!_) == 1
 
 def getNeighbors(words: Map[String, String]): Map[String, String] = {
   words.map(x => {
@@ -35,4 +38,3 @@ def getNeighbors(words: Map[String, String]): Map[String, String] = {
   }).flatten.toMap
 }
 
-def isOffByOne(word: String, other: String) = (word, other).zipped.map(_ == _).count(!_) == 1
