@@ -1,23 +1,14 @@
-if(args.size != 2) {
-  println("Invalid number of arguments.")
-  sys.exit(1)
-}
-
+require(args.size == 2, "Invalid number of arguments")
 val start = args(0)
 val end = args(1)
-
-if(start.length != end.length) {
-  println("Word lengths must match.")
-  sys.exit(1)
-}
+require(start.length == end.length, "Word lengths must match.")
 
 var lines = io.Source.fromFile("/usr/share/dict/words").getLines
   .filter(_.length == start.length).toIterable.toSet
 
-if(!lines.contains(start) || !lines.contains(end)) {
-  println("Word does not exist in dictionary.")
-  sys.exit(1)
-}
+def requireWordInDictionary(word: String) = require(lines.contains(word), word + " not in dictionary")
+requireWordInDictionary(start)
+requireWordInDictionary(end)
 
 println(start + " > " + end)
 println(getAnswer)
