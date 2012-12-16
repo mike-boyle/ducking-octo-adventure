@@ -23,10 +23,7 @@ println(start + " > " + end)
 println(getAnswer)
 
 def getAnswer: String = {
-  val pair = lines.partition(isOffByOne(start, _))
-  val offByOne = pair._1.map(x => (x, start + " > " + x)).toMap
-  lines = pair._2.toSet
-  val stream = collection.Iterator.iterate(offByOne)(getNeighbors(_))
+  val stream = collection.Iterator.iterate(Map(start -> start))(getNeighbors(_))
   stream.find(x => x.contains(end) || x.isEmpty).get.getOrElse(end, "FAILURE")
 }
 
