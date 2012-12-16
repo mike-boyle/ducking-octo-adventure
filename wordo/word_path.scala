@@ -13,7 +13,7 @@ requireWordInDictionary(end)
 println(start + " > " + end)
 println(getAnswer)
 
-def getAnswer: String = {
+def getAnswer = {
   val stream = Iterator.iterate(Map(start -> start))(getNeighbors)
   stream.find(isLastElement).get.getOrElse(end, "FAILURE")
 }
