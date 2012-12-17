@@ -4,7 +4,7 @@ val end = args(1)
 require(start.length == end.length, "Word lengths must match.")
 
 var dictionary = io.Source.fromFile("/usr/share/dict/words").getLines
-  .filter(_.length == start.length).toIterable.toSet
+  .filter(_.length == start.length).toIterable.toSet.par
 
 def requireWordInDictionary(word: String) = require(dictionary.contains(word), word + " not in dictionary")
 requireWordInDictionary(start)
@@ -23,7 +23,7 @@ def isOffByOne(word: String, other: String) = (word, other).zipped.map(_ == _).c
 
 def getNeighbors(words: Map[String, String]): Map[String, String] = {
   words.map(x => {
-    val items = dictionary.filter(isOffByOne(x._1, _)).toSet
+    val items = dictionary.filter(isOffByOne(x._1, _))
     dictionary = dictionary &~ items
     items.map(y => (y, x._2 + " > " + y))
   }).flatten.toMap
