@@ -21,7 +21,7 @@ def getAnswer = {
 def isLastElement(x: Map[String, String]) = x.contains(end) || x.isEmpty
 def isOffByOne(word: String, other: String) = (word, other).zipped.map(_ == _).count(!_) == 1
 
-def getNeighbors(words: Map[String, String]): Map[String, String] = {
+def getNeighbors(words: Map[String, String]) = {
   words.map(x => {
     val items = dictionary.filter(isOffByOne(x._1, _))
     dictionary = dictionary &~ items
