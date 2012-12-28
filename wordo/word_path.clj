@@ -1,7 +1,9 @@
 (def start "did")
 (def end "rad")
 
-(def words ["dad" "rat" "rad"])
+(def rdr (clojure.java.io/reader "/usr/share/dict/words"))
+(def words (line-seq rdr))
+(. rdr close)
 
 (defn mitch [a b]
   (and 
@@ -19,14 +21,12 @@
 
 (defn finished [set]
   (or 
-  	(contains? end set)
+  	(some (partial = end) set)
     (empty? set)))
-          
-(mitch "rad" "dad")
-           
-(nate ["bad" "pot"] ["fad" "dad" "bot" "oob"])
 
-(take 5 
-      (iterate #(nate [%1] words) 
-               start))
+(first (filter
+        finished
+        (take 5 
+              (iterate #(nate % words) 
+                       [start]))))
           
